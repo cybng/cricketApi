@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
+const userModal=require("../modal/auth/userModal");
+const {login} = require("../controller/auth/Auth");
 
- router.get("/",(req,res,next)=>{
- 	return res.status(200).json({page:"Page Page"});
- });
+ router.post("/login",login);
 
 
 module.exports = router;
