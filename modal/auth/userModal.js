@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 
-const userSchema=mongoose.Schema({
+const userSchema=new mongoose.Schema({
 	fname:{
 		type:String,
 		required:true,
@@ -42,14 +42,14 @@ const userSchema=mongoose.Schema({
 		default:"user"
 	}
 
-});
+},{timestamps:true});
 
 userSchema.virtual("fullname").get(()=>{
     return(`${this.fname} ${this.lname}`);
 })
 userSchema.methods ={ 
-	authenticate:async (pass)=>{
-	return await  bcrypt.compare(pass,this.password);
+	authenticate:async function(pass){
+	return await bcrypt.compare(pass,this.password);
  }
 }
 

@@ -1,31 +1,53 @@
 const User = require("../../modal/auth/userModal");
-const {msg} = require("../../helper/Messages");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const {returnError,returnSuccess} = require("../../helper/ReturnStatus");
+
+
+
 exports.login=(req,res)=>{
-    return res.status(200).json({data:"login Successfull"});
+     User.findOne({username:req.body.username})
+         .exec(async(err,data)=>{
+            if(err){
+                return returnError(201,3,res);
+            }
+            if(data){ 
+              const checkPassword = await data.authenticate(req.body.pass);
+              if(checkPassword && (data.role=="admin" || data.role=="user" || data.role=="agent")){
+                const token = jwt.sign({_id:data._id,role:data.role},process.env.r4h,{expiresIn:"1d"});
+                const {_id,fname,lname,username,role,profilePic,fullName} = data;
+                res.cookie("token",token,{expiresIn:"1d"});
+                const userData={token,user:{_id,fname,lname,username,role,profilePic,fullName}}
+                return returnSuccess(200,userData,res);
+              }else{
+                return returnError(201,4,res);
+              }
+            }else{
+                return returnError(201,5,res);
+            }
+         })
 }
 
 exports.reg=(req,res)=>{
       User.findOne({username:req.body.username})
-          .exec((err,data)=>{
+          .exec(async(err,data)=>{
             if(data){
-                return returnStatus(201,0,res);
+                return returnError(201,0,res);
             }
-            const {fname,lname,username,password} = req.body;
+            const {fname,lname,username,pass} = req.body;
+            const password = await bcrypt.hash(pass,10);
             const userData = new User({
                 fname,lname,username,password
             });
             userData.save((err,data)=>{
                 if(err){
-                    return returnStatus(201,3,res);
+                    return returnError(201,3,res);
                 }
                 if(data){
-                   return returnStatus(200,1,res);
+                   return returnError(200,1,res);
                 }
 
             });
           });
 }
 
-const returnStatus = (status,msgKey,res)=>{
-     res.status(status).json({msg:`${msg[msgKey]}`});
-}
