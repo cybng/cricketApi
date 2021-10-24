@@ -1,9 +1,9 @@
 # cricketApi
 cricket betting application
 <p>Signup Api</p>
-<p>http://localhost:3000/api/reg</p>
+<a href="http://localhost:3000/api/reg">http://localhost:3000/api/reg</a>
 <p>Login Api</p>
-<p>http://localhost:3000/api/login</p>
+<a href="http://localhost:3000/api/login">http://localhost:3000/api/login</a>
 
 <small>More api url will be add....</small>
 
