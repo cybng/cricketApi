@@ -4,13 +4,14 @@ const env = require("dotenv");
 const app = express();
 
 const userRouter = require("./router/users");
+const agentRouter = require("./router/Agent");
 
 //setup...
 env.config();
 app.use(express.json());
 
 //router...
-app.use("/api",userRouter);
+app.use("/api",[userRouter,agentRouter]);
 
 
 
