@@ -1,0 +1,27 @@
+{
+  "name": "cricketapi",
+  "version": "1.0.0",
+  "description": "cricket betting application api",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon app.js"
+  },
+  "keywords": [
+    "cricket",
+    "api",
+    "betting",
+    "cybng",
+    "backend",
+    "nodejs",
+    "node"
+  ],
+  "author": "r4h",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "express-validator": "^6.13.0",
+    "mongoose": "^6.0.12",
+    "nodemon": "^2.0.14"
+  }
+}
