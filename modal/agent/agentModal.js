@@ -1,11 +1,7 @@
 const mongoose = require("mongoose");
 
 const agentSchema = new mongoose.Schema({
-	agentId:{
-		type:mongoose.Schema.ObjectId,
-		default:null
-	},
-	agentBalance:{
+	  agentBalance:{
 		type:String,
 		default:"00"
 	}

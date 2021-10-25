@@ -3,6 +3,7 @@ const Agent = require("../../modal/agent/agentModal");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const {returnError,returnSuccess} = require("../../helper/ReturnStatus");
+const {twoTableSave} = require("../../helper/TwoTableExtention");
 
 // save agent Detail in userModal
 exports.addagent=(req,res)=>{
@@ -13,35 +14,13 @@ exports.addagent=(req,res)=>{
             }
             const {fname,lname,username,pass} = req.body;
             const password = await bcrypt.hash(pass,10);
-            const userData = new User({
-                fname,lname,username,password,role:"agent"
-            });
-            userData.save((err,data)=>{
-                if(err){
-                    return returnError(201,3,res);
-                }
-                if(data){
-                   return agentModal(data._id,res);
-                }
-
-            });
+            const userData = {fname,lname,username,password,role:"agent"}
+            const secondData = {agentBalance:"00"}
+            twoTableSave(User,userData,Agent,secondData,res);
           });
 
 }
-// save agent id and balance detail in agentModal
-const agentModal = (agentId,res)=>{
-     const agentData = new Agent({
-     	agentId
-     });
-     agentData.save((err,data)=>{
-     	if(err){
-     	    return returnError(201,3,res);
-     	}
-     	if(data){
-     		return returnSuccess(200,data,res);
-     	}
-     })
-}
+
 
 // get Agent Detail with joined table
 exports.getagent=(req,res)=>{
@@ -50,7 +29,7 @@ exports.getagent=(req,res)=>{
   		$lookup: {
   	      from: "agents",
   	      localField: "_id",
-  	      foreignField: "agentId",
+  	      foreignField: "_id",
   	      as: "other",
   	     },
   	   },
