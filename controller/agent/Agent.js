@@ -42,3 +42,33 @@ const agentModal = (agentId,res)=>{
      	}
      })
 }
+
+// get Agent Detail with joined table
+exports.getagent=(req,res)=>{
+	const agentJoin=User.aggregate([
+  {
+  	
+    $lookup: {
+      from: "agents",
+      localField: "_id",
+      foreignField: "agentId",
+      as: "other",
+    },
+  },
+  { $project: { password: false,"other.agentId":false} },
+
+  {
+    $unwind: "$other",
+  },
+
+]);
+	agentJoin.exec((err,data)=>{
+		if(err){
+			return returnError(201,3,res);
+		}
+		if(data){
+			return returnSuccess(200,data,res);
+		}
+
+	});
+}

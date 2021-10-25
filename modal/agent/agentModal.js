@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const agentSchema = new mongoose.Schema({
 	agentId:{
-		type:String,
+		type:mongoose.Schema.ObjectId,
 		default:null
 	},
 	agentBalance:{
